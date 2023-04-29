@@ -12,11 +12,8 @@ class GoogleMapWidget extends StatefulWidget {
 class _GoogleMapWidgetState extends State<GoogleMapWidget>
     with AutomaticKeepAliveClientMixin {
   final location = Location().getLocation();
-
   static const _initialCameraPosition =
   CameraPosition(target: LatLng(43.362343, -8.411540), zoom: 7.5);
-  String placeName = "";
-  String desc = "";
   //Google Map stuffs
   CameraPosition _cameraPosition = _initialCameraPosition;
   bool _mapCreated = false;
@@ -26,7 +23,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
   final CameraTargetBounds _cameraTargetBounds = CameraTargetBounds.unbounded;
   final MinMaxZoomPreference _minMaxZoomPreference =
       MinMaxZoomPreference.unbounded;
-  final MapType _mapType = MapType.hybrid;
+  final MapType _mapType = MapType.normal;
   final bool _rotationActivated = true;
   final bool _scrollActivated = true;
   final bool _tiltActivated = true;
@@ -36,13 +33,19 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
   final bool _trafficActivated = false;
   final bool _localizationActivated = true;
   final bool _localizationButtonActivated = true;
-  late GoogleMapController
-  _mapController; //must be instanciated or defined as late
+  late GoogleMapController _mapController;
   final bool _nightMode = true;
 
   @override
   Widget build(BuildContext context) {
-    return mapWidget();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+      onPressed: _currentLocation,
+      label: Text('Location'),
+      icon: Icon(Icons.location_on),
+    ),
+      body: mapWidget(),
+    );
   }
 
   Widget _getMap(double latitude, double longitude) {
@@ -59,13 +62,33 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         tiltGesturesEnabled: _tiltActivated,
         zoomControlsEnabled: _zoomControlsActivated,
         zoomGesturesEnabled: _zoomGestureActivated,
-        myLocationButtonEnabled: _localizationActivated,
-        myLocationEnabled: _localizationButtonActivated,
+        //myLocationButtonEnabled: _localizationButtonActivated,
+        //myLocationEnabled: _localizationActivated,
         onMapCreated: onMapCreate,
         onCameraMove: _updateCameraPosition,
         trafficEnabled: _trafficActivated,
     );
     return googleMap;
+  }
+
+  void _currentLocation() async {
+    final GoogleMapController controller = _mapController;
+    LocationData? currentLocation;
+    var location = Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+    if(currentLocation != null){
+      controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+          bearing: 0,
+          target: LatLng(currentLocation.latitude!, currentLocation.longitude!),
+          zoom: 15.0,
+        ),
+      ));
+    }
   }
 
   Widget mapWidget() {
@@ -78,9 +101,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
             _mapCreated = true;
             //_userLocation = position;
             return SafeArea(
-
                 child: _getMap(position.latitude, position.longitude));
-
           } else {
             return const Center(child: LinearProgressIndicator(semanticsLabel: 'Loading map'));
           }

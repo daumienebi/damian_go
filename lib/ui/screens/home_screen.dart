@@ -12,12 +12,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Damian Go'),
-        elevation: 0,
-      ),
-      body: const GoogleMapWidget(),
-    );
+    return const GoogleMapWidget();
   }
 }
