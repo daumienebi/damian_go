@@ -12,6 +12,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return const GoogleMapWidget();
+    return Stack(
+      children: [
+        const GoogleMapWidget(),
+        Positioned(
+          top: 100,
+          left: 15,
+          right: 0,
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(backgroundColor: Colors.white,shape: const StadiumBorder()),
+                child: const Text('Countries',style: TextStyle(color: Colors.black87),),
+
+              ),
+              const SizedBox(width: 7),
+              ElevatedButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(backgroundColor: Colors.white,shape: const StadiumBorder()),
+                child: const Text('Reduce zoom',style: TextStyle(color: Colors.black87),),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
