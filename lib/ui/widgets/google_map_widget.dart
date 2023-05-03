@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'package:damian_go/ui/screens/drawer_screen.dart';
 import 'package:damian_go/utils/countries_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,7 +16,8 @@ class GoogleMapWidget extends StatefulWidget {
 
 class _GoogleMapWidgetState extends State<GoogleMapWidget>
     with AutomaticKeepAliveClientMixin {
-  final location = Location().getLocation();
+  late var location;
+
   final Map<String, LatLng> countryLocations = CountriesUtil.getAllCountries();
   late LocationData? userLocation;
   final Set<Marker> _markerList = {};
@@ -43,17 +45,19 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
   late GoogleMapController _mapController;
   final bool _nightMode = true;
 
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadIcon();
+    setUserLocation();
+    loadDamianZones();
   }
 
-  loadIcon() async {
+  setUserLocation() async{
+    location = Location().getLocation();
+  }
 
+  loadDamianZones() async {
     final customIcon = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(),
         'assets/images/stick_250.png'
@@ -65,7 +69,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         position: countryLocations[countryName]!,
         infoWindow: InfoWindow(
           title: 'Country Test',
-          snippet: 'Damian in $countryName',
+          snippet: 'Damian zone in $countryName',
         ),
         icon: customIcon,
       );
@@ -75,15 +79,19 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         tooltip: 'Generate a new place',
         //onPressed: _currentLocation,
         onPressed: () async{
-          String countryName = await CountriesUtil.getCountryFromLocation(LatLng(userLocation!.latitude!, userLocation!.longitude!));
-          if (countryName != null && countryLocations.containsKey(countryName)) {
-            LatLng countryLocation = countryLocations[countryName]!;
-          }
+          String countryName = await CountriesUtil.getCountryFromLocation(
+            //use Spain as the default value if the userLocation is null
+              LatLng(userLocation!.latitude ?? 40.463667, userLocation!.longitude ?? -3.74922)
+          );
+          //if (countryLocations.containsKey(countryName)) {
+          //  LatLng countryLocation = countryLocations[countryName]!;
+          //}
             showModalBottomSheet(
                 barrierColor: Colors.black26,
                 backgroundColor: Colors.transparent,
@@ -92,24 +100,18 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                   TextEditingController countryNameController = TextEditingController(
                     text: countryName
                   );
-                  TextEditingController descController = TextEditingController();
-                  TextEditingController latitudeController = TextEditingController(
-                      text: _cameraPosition.target.latitude.toString());
-                  TextEditingController longitudeController = TextEditingController(
-                      text: _cameraPosition.target.longitude.toString());
                   return Container(
-                    height: 350,
+                    height: 380,
                     padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    decoration: const BoxDecoration(
+                    margin: const EdgeInsets.only(left: 7, right: 7),
+                    decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10))
+                        borderRadius: BorderRadius.circular(15)
                     ),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          Image.asset('assets/images/damian_small.png'),
                           const Text(
                             'Add a new zone',
                             style: TextStyle(
@@ -124,21 +126,12 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                               children: [
                                 TextFormField(
                                     controller: countryNameController,
-                                    decoration: InputDecorations
-                                        .countryNameField()),
-                                TextFormField(
-                                  controller: descController,
-                                  decoration: InputDecorations.descField(),
-                                  maxLines: null,
+                                    decoration: InputDecoration(
+                                        labelText: "Country",
+                                        icon: Icon(Icons.place),
+                                        enabled: false
+                                    )
                                 ),
-                                TextFormField(
-                                  controller: latitudeController,
-                                  decoration: InputDecorations.latField(),
-                                  enabled: false,
-                                ),
-                                TextFormField(
-                                    controller: longitudeController,
-                                    decoration: InputDecorations.lngField()),
                                 ElevatedButton(
                                   onPressed: () {},
                                   style: TextButton.styleFrom(
@@ -157,7 +150,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                 });
         },
         backgroundColor: Colors.blueGrey.shade900,
-        label: const Text('Add place',style: TextStyle(color: Colors.white),),
+        label: const Text('Add zone',style: TextStyle(color: Colors.white),),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         icon: SizedBox(
           height: 80,
@@ -166,12 +159,43 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: mapWidget(),
-      drawer: const Drawer(),
+      //body: mapWidget(),
+      body: Stack(
+        children: [
+          mapWidget(),
+          Positioned(
+            top: screenHeight - 870, //check it out
+            left: 15,
+            right: 0,
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(backgroundColor: Colors.white,shape: const StadiumBorder()),
+                  child: const Text('Countries',style: TextStyle(color: Colors.black87),),
+
+                ),
+                const SizedBox(width: 7),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(backgroundColor: Colors.white,shape: const StadiumBorder()),
+                  child: const Text('Reduce zoom',style: TextStyle(color: Colors.black87),),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
       appBar: AppBar(
+        // use the leading icon for the drawer
+        leading: InkWell(
+            onTap: () =>
+                Navigator.of(context).push(createRouteWithSlideAnimation()),
+          child: Icon(Icons.menu),
+        ),
         centerTitle: true,
         actions: const [
-          Icon(Icons.new_releases),
+          Icon(Icons.help),
           SizedBox(width: 10),
         ],
         elevation: 0,
@@ -185,7 +209,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
   Widget getMap(double latitude, double longitude) {
     final GoogleMap googleMap = GoogleMap(
       initialCameraPosition:
-          CameraPosition(target: LatLng(latitude, longitude), zoom: 7.5),
+          CameraPosition(
+              target: LatLng(latitude, longitude),
+              zoom: 1,
+            tilt: 70,
+          ),
       compassEnabled: _compasActivated,
       mapToolbarEnabled: _toolBarActivated,
       cameraTargetBounds: _cameraTargetBounds,
@@ -202,6 +230,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
       onCameraMove: _updateCameraPosition,
       trafficEnabled: _trafficActivated,
       markers: _markerList,
+
     );
     return googleMap;
   }
@@ -275,6 +304,24 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     });
   }
 
+  Route createRouteWithSlideAnimation() {
+    return PageRouteBuilder(
+      settings: RouteSettings(name: 'drawerScreen',),
+      pageBuilder: (context, animation, secondaryAnimation) => const DrawerScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(-1.5, 1);
+        const end = Offset.zero;
+        final tween = Tween(begin: begin, end: end);
+        final offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   // TODO: implement wantKeepAlive
   //https://stackoverflow.com/questions/56632225/google-maps-dequeuebuffer-bufferqueue-has-been-abandoned
@@ -341,55 +388,5 @@ class BitmapDescriptorHelper {
     return await pictureRecorder
         .endRecording()
         .toImage(width.toInt(), height.toInt());
-  }
-}
-
-class InputDecorations{
-
-  static InputDecoration countryNameField(){
-    return const InputDecoration(
-        labelText: "Country",
-        icon: Icon(Icons.place),
-        enabled: true
-    );
-  }
-
-  static InputDecoration descField(){
-    return const InputDecoration(
-        labelText: "Description",
-        icon: Icon(Icons.description),
-        enabled: true
-    );
-  }
-
-  static InputDecoration latField(){
-    return const InputDecoration(
-        labelText: "Latitude",
-        icon: Icon(Icons.gps_fixed),
-        enabled: false
-    );
-  }
-
-  static InputDecoration lngField(){
-    return const InputDecoration(
-        labelText: "Longitude",
-        icon: Icon(Icons.gps_fixed),
-        enabled: false
-    );
-  }
-
-  static InputDecoration searchPlaces(){
-    BorderSide borderSide = const BorderSide(color: Colors.cyan);
-    BorderRadius borderRadius = BorderRadius.circular(20);
-    return  InputDecoration(
-        hintText: 'Name of the place',
-        border: OutlineInputBorder(
-          borderRadius: borderRadius,
-          borderSide: borderSide,
-
-        ),
-        prefixIcon: const Icon(Icons.search)
-
-    );
   }
 }
