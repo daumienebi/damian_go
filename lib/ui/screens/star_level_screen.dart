@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-enum SocialMedia { Facebook, Twitter, Instagram, Whatsapp,Enlace}
+enum SocialMedia { Facebook, Twitter, Instagram,Email, Whatsapp,Enlace}
 class StarLevelScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,7 @@ class StarLevelScreen extends StatelessWidget{
           title: Text('Adventurer'),
         ),
         ListTile(
-          leading: Icon(Icons.star,color: Colors.yellow,size: 40,),
+          leading: Icon(Icons.star,color: Colors.amber,size: 40,),
           title: Text('Discoverer'),
         ),
         ListTile(
@@ -55,5 +52,4 @@ class StarLevelScreen extends StatelessWidget{
       ],
     );
   }
-
 }

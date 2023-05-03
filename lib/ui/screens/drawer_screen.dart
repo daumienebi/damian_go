@@ -1,9 +1,12 @@
 import 'package:damian_go/ui/screens/star_level_screen.dart';
+import 'package:damian_go/utils/navigator_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../widgets/widgets.dart';
 // ignore_for_file: prefer_const_constructors
 
 class DrawerScreen extends StatelessWidget{
@@ -18,11 +21,11 @@ class DrawerScreen extends StatelessWidget{
           title: Text('Profile'),
           backgroundColor: Colors.blueGrey.shade900,
         ),
-        body: _mainBody(context)
+        body: body(context)
     );
   }
 
-  Widget _mainBody(context){
+  Widget body(context){
     return Container(
       margin: EdgeInsets.only(top: 15,left: 20, right: 20),
       child: Column(
@@ -59,22 +62,21 @@ class DrawerScreen extends StatelessWidget{
       padding: EdgeInsets.all(7),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.blueGrey.shade100,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
-            radius: 90, // or any other size you want
+            radius: 60, // or any other size you want
             backgroundImage: AssetImage('assets/images/damian.png'),
             backgroundColor: Colors.transparent,
           ),
-          VerifiedUserName(name: '@dyebi',isVerified: true),
-          SizedBox(height: 5),
+          VerifiedUserName(name: '@derick',isVerified: true),
+          Clout(followers: 10,following: 0),
           ZoneCount(count: 15),
-          SizedBox(height: 5),
-          LevelStars(level: 4)
+          UserStarLevel(),
         ],
       ),
 
@@ -102,36 +104,28 @@ class DrawerScreen extends StatelessWidget{
     );
   }
 
-  Route _createRoute({required page}) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-    );
-  }
-
   List<Widget> _optionsList(context){
     List<Widget> widgets = [];
     final subTitleStyle = TextStyle(fontSize: 14);
     final titleStyle = TextStyle(fontSize: 17);
+    final Color iconColor = Colors.blueGrey.shade500;
 
     widgets.add(InkWell(
       child: ListTile(
           title: Text('Star levels',style: titleStyle),
-          leading: Icon(Icons.star),
+          subtitle: Text('Available levels as you add zones'),
+          leading: Icon(Icons.star,color: iconColor),
           trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
           onTap: ()=> Navigator.of(context).push(
-              _createRoute(page: StarLevelScreen()))
+              NavigatorUtil.createRouteWithSlideAnimation(newPage: StarLevelScreen())
+          )
       ),
     ));
 
     widgets.add(ListTile(
         title: Text('Share with a friend',style: titleStyle),
-        leading: Icon(Icons.share),
+        subtitle: Text('Share the app with friends'),
+        leading: Icon(Icons.share,color: iconColor),
         trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
         onTap: () {
         showModalBottomSheet(
@@ -171,20 +165,9 @@ class DrawerScreen extends StatelessWidget{
     ));
 
     widgets.add(ListTile(
-        title: Text('Terms and conditions',style: titleStyle),
-        leading: Icon(Icons.read_more_outlined),
-        trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,)
-    ));
-
-    widgets.add(ListTile(
-      title: Text('Privacy policy',style: titleStyle),
-      leading: Icon(Icons.privacy_tip_outlined),
-      trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
-    ));
-
-    widgets.add(ListTile(
       title: Text('Delete account',style: titleStyle),
-      leading: Icon(Icons.delete),
+      leading: Icon(Icons.delete,color: iconColor),
+      subtitle: Text('Permanently delete your account'),
       trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
       onTap: (){
       },
@@ -192,7 +175,7 @@ class DrawerScreen extends StatelessWidget{
 
     widgets.add(ListTile(
       title: Text('Logout',style: titleStyle),
-      leading: Icon(Icons.logout),
+      leading: Icon(Icons.logout,color: iconColor),
       trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
       onTap: (){
       },
@@ -274,6 +257,20 @@ class DrawerScreen extends StatelessWidget{
       width: 15,
     ));
     items.add(socialButton(
+        socialMedia: SocialMedia.Email.name,
+        icon: Icon(
+          Icons.email,
+          color: Colors.redAccent,
+          size: 40,
+        ),
+        onClicked: (){
+          Navigator.pop(context);
+          share(SocialMedia.Facebook,context);
+        }));
+    items.add(SizedBox(
+      width: 15,
+    ));
+    items.add(socialButton(
         socialMedia: SocialMedia.Facebook.name,
         icon: Icon(
           FontAwesomeIcons.facebook,
@@ -310,89 +307,5 @@ class DrawerScreen extends StatelessWidget{
         )
     );
     return items;
-  }
-}
-
-class ZoneCount extends StatelessWidget {
-  final int count;
-
-  const ZoneCount({
-    Key? key,
-    required this.count,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.place),
-        SizedBox(width: 4),
-        Text('${count.toString()} zones added',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class LevelStars extends StatelessWidget {
-  final int level;
-
-  const LevelStars({
-    Key? key,
-    required this.level,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        level,
-            (index) => Icon(
-          Icons.star,
-          color: Colors.amber,
-          size: 16,
-        ),
-      ),
-    );
-  }
-}
-
-class VerifiedUserName extends StatelessWidget {
-  final String name;
-  final bool isVerified;
-
-  const VerifiedUserName({
-    Key? key,
-    required this.name,
-    this.isVerified = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          name,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 17,
-          ),
-        ),
-        SizedBox(width: 5),
-        if (isVerified)
-          Icon(
-            Icons.check_circle,
-            color: Colors.blue,
-            size: 20,
-          ),
-      ],
-    );
   }
 }
