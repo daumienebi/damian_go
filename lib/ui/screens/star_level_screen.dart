@@ -1,6 +1,8 @@
+import 'package:damian_go/utils/constants.dart';
+import 'package:damian_go/utils/star_level_util.dart';
 import 'package:flutter/material.dart';
+import '../widgets/widgets.dart';
 
-enum SocialMedia { Facebook, Twitter, Instagram,Email, Whatsapp,Enlace}
 class StarLevelScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -10,46 +12,88 @@ class StarLevelScreen extends StatelessWidget{
         backgroundColor: Colors.blueGrey.shade900,
         title: Text('Star levels'),
       ),
-
-      body: starLevels(),
+      body: starLevels(context),
     );
   }
 
-  Widget starLevels(){
+  Widget starLevels(BuildContext context){
     return ListView(
+      padding: EdgeInsets.all(5),
       children: [
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.red,size: 40,),
-          title: Text('Beginner'),
+        LevelListTile(
+          description: 'Less than 50 zones',
+          starLevel: StarLevel.Beginner,
+          starLevelDesign: StarLevelDesign.beginnerStarLevelDesign,
         ),
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.blue,size: 40,),
-          title: Text('Explorer'),
+        LevelListTile(
+            description: 'Less than 100 zones',
+            starLevel: StarLevel.Explorer,
+            starLevelDesign: StarLevelDesign.explorerStarLevelDesign
         ),
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.green,size: 40,),
-          title: Text('Adventurer'),
+        LevelListTile(
+            description: 'Less than 150 zones',
+            starLevel: StarLevel.Adventurer,
+            starLevelDesign: StarLevelDesign.adventurerStarLevelDesign
         ),
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.amber,size: 40,),
-          title: Text('Discoverer'),
+        LevelListTile(
+            description: 'Less than 200 zones',
+            starLevel: StarLevel.Discoverer,
+            starLevelDesign: StarLevelDesign.discovererStarLevelDesign
         ),
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.black,size: 40,),
-          title: Text('Navigator'),
+        LevelListTile(
+            description: 'Less than 250 zones',
+            starLevel: StarLevel.Navigator,
+            starLevelDesign: StarLevelDesign.navigatorStarLevelDesign
         ),
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.brown,size: 40,),
-          title: Text('Pioneer'),
-        ),ListTile(
-          leading: Icon(Icons.star,color: Colors.pink,size: 40,),
-          title: Text('Trekker'),
+        LevelListTile(
+            description: 'Less than 300 zones',
+            starLevel: StarLevel.Pioneer,
+            starLevelDesign: StarLevelDesign.pioneerStarLevelDesign
         ),
-        ListTile(
-          leading: Icon(Icons.star,color: Colors.teal,size: 40,),
-          title: Text('Master Explorer'),
+        LevelListTile(
+            description: 'Less than 350 zones',
+            starLevel: StarLevel.Trekker,
+            starLevelDesign: StarLevelDesign.trekkerStarLevelDesign
+        ),
+        LevelListTile(
+            description: 'Less than 400 zones',
+            starLevel: StarLevel.Master_Explorer,
+            starLevelDesign: StarLevelDesign.masterExplorerStarLevelDesign
         )
-      ],
+      ]
+    );
+  }
+}
+
+class LevelListTile extends StatelessWidget {
+  final String description;
+  final StarLevel starLevel;
+  final StarLevelDesign starLevelDesign;
+  const LevelListTile({
+    Key? key, required this.description, required this.starLevel, required this.starLevelDesign,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: starLevelDesign.icon,
+      subtitle: Text(description),
+      trailing: InkWell(
+        child: Icon(Icons.info_outline),
+        onTap:(){
+          showDialog(
+              context: context,
+              builder: (context){
+                return AlertDialog(
+                  content: Container(
+                    child: UserStarLevel(starLevel: starLevel),
+                  ),
+                );
+              }
+          );
+        },
+      ),
+      title: Text('${StarLevelUtil.getStarLevelName(starLevel)}'),
     );
   }
 }

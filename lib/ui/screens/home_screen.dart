@@ -1,4 +1,4 @@
-import 'package:damian_go/ui/widgets/google_map_widget.dart';
+import 'package:damian_go/ui/widgets/map/google_map_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

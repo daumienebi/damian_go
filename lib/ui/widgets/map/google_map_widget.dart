@@ -1,8 +1,10 @@
 import 'package:damian_go/ui/screens/drawer_screen.dart';
 import 'package:damian_go/ui/screens/star_level_screen.dart';
+import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/countries_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:location/location.dart';
 
 //https://blog.codemagic.io/creating-a-route-calculator-using-google-maps/
@@ -77,7 +79,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
+    //double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       floatingActionButton: floatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -85,7 +87,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         children: [
           Container(
             color: Colors.blueGrey.shade900,
-            height: 50,
+            height: 60,
             child: ListView(
               padding: EdgeInsets.all(5),
               scrollDirection: Axis.horizontal,
@@ -98,12 +100,14 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                 ),
                 optionButton(
                     text:'Current country',
-                    onPressed: (){},
+                    onPressed: ()=> currentLocation(),
                     backgroundColor: Colors.black54,
                 ),
                 optionButton(
                     text:'Base (Spain)',
-                    onPressed: ()=> currentLocation(),
+                    onPressed: (){
+                      moveToLocation(countryLocations['Spain']!);
+                    },
                     backgroundColor: Colors.blueGrey),
                 optionButton(text:'Globe view  🌍',onPressed: (){},backgroundColor: Colors.amber.shade800),
               ],
@@ -119,6 +123,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                 Navigator.of(context).push(createRouteWithSlideAnimation()),
           child: Icon(Icons.menu),
         ),
+        //toolbarHeight: 50,
         centerTitle: true,
         actions: [
           popupMenuButton(),
@@ -270,7 +275,6 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
             onPressed: onPressed,
             style: TextButton.styleFrom(
                 backgroundColor: backgroundColor,
-                //fixedSize: Size(100,50),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
             ),
             child: Text(text,style: TextStyle(color: Colors.white),),
@@ -287,7 +291,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
           CameraPosition(
               target: LatLng(latitude, longitude),
               zoom: 1,
-            tilt: 70,
+            tilt: 20,
           ),
       compassEnabled: _compasActivated,
       mapToolbarEnabled: _toolBarActivated,
@@ -305,7 +309,6 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
       onCameraMove: _updateCameraPosition,
       trafficEnabled: _trafficActivated,
       markers: _markerList,
-
     );
     return googleMap;
   }
@@ -331,6 +334,17 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     }
   }
 
+  void moveToLocation(LatLng latLng) async {
+    final GoogleMapController controller = _mapController;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(latLng.latitude, latLng.longitude),
+        zoom: 7.0,
+      ),
+    ));
+  }
+
   Widget mapWidget() {
     //the current location of the user has to be fetched
     return FutureBuilder(
@@ -343,8 +357,22 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
             //_userLocation = position;
             return getMap(position.latitude, position.longitude);
           } else {
-            return const Center(
-                child: LinearProgressIndicator(semanticsLabel: 'Loading map'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 100,
+                    child: LoadingIndicator(
+                      indicatorType: Indicator.ballPulseRise,
+                      colors: Constants.loadingIndicatorColors,
+                    ),
+                  ),
+                  Text('Loading map...')
+                ],
+              )
+            );
           }
         });
   }

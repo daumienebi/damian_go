@@ -1,4 +1,5 @@
 import 'package:damian_go/ui/screens/star_level_screen.dart';
+import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/navigator_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +28,7 @@ class DrawerScreen extends StatelessWidget{
 
   Widget body(context){
     return Container(
-      margin: EdgeInsets.only(top: 15,left: 20, right: 20),
+      margin: EdgeInsets.only(top: 15,left: 10, right: 10),
       child: Column(
         children: [
           profileWidget(context),
@@ -76,10 +77,9 @@ class DrawerScreen extends StatelessWidget{
           VerifiedUserName(name: '@derick',isVerified: true),
           Clout(followers: 10,following: 0),
           ZoneCount(count: 15),
-          UserStarLevel(),
+          UserStarLevel(starLevel:StarLevel.Adventurer),
         ],
       ),
-
     );
   }
 
@@ -97,7 +97,8 @@ class DrawerScreen extends StatelessWidget{
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 15,
-                offset: Offset(0, 3))
+                offset: Offset(0, 3)
+            )
           ],
         ),
       ),
