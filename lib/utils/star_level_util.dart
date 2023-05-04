@@ -37,61 +37,51 @@ class StarLevelUtil{
 
 /// The design for each star level
 class StarLevelDesign{
-  StarLevelDesign({required this.starLevel,required this.startColor,
-    required this.endColor,required this.icon});
+  StarLevelDesign({required this.starLevel,required this.backgroundColor,required this.icon});
   static double iconSize = 40;
   // define the values
   final StarLevel starLevel;
-  final Color startColor;
-  final Color endColor;
+  final Color backgroundColor;
   final Icon icon;
 
   static var beginnerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Beginner,
-      startColor: Colors.lightGreen,
-      endColor: Colors.redAccent,
+      backgroundColor: Colors.white,
       icon: Icon(Icons.star,color: Colors.red,size: iconSize)
   );
   static var explorerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Explorer,
-      startColor: Colors.lightBlue,
-      endColor: Colors.orange,
+      backgroundColor: Colors.blueGrey.shade700,
       icon: Icon(Icons.star,color: Colors.lightBlue,size: iconSize)
   );
   static var adventurerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Adventurer,
-      startColor: Colors.lightGreen,
-      endColor: Colors.cyanAccent.shade200,
+      backgroundColor: Colors.amber,
       icon: Icon(Icons.star,color: Colors.green,size: iconSize)
   );
   static var discovererStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Discoverer,
-      startColor: Colors.brown,
-      endColor: Colors.orange,
+      backgroundColor: Colors.red.shade700,
       icon: Icon(Icons.star,color: Colors.amber,size: iconSize)
   );
   static var navigatorStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Navigator,
-      startColor: Colors.blueGrey,
-      endColor: Colors.yellow,
+      backgroundColor: Colors.white,
       icon: Icon(Icons.star,color: Colors.indigo,size: iconSize)
   );
   static var pioneerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Pioneer,
-      startColor: Colors.brown,
-      endColor: Colors.greenAccent,
+      backgroundColor: Colors.yellow,
       icon: Icon(Icons.star,color: Colors.brown,size: iconSize)
   );
   static var trekkerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Trekker,
-      startColor: Colors.pinkAccent,
-      endColor: Colors.white70,
+      backgroundColor: Colors.white,
       icon: Icon(Icons.star,color:Colors.pink,size: iconSize)
   );
   static var masterExplorerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Master_Explorer,
-      startColor: Colors.tealAccent,
-      endColor: Colors.lightBlueAccent,
+      backgroundColor: Colors.cyanAccent.shade200,
       icon: Icon(Icons.star,color: Colors.teal,size: iconSize)
   );
   // Add one for Damian too

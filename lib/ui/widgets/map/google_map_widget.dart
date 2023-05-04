@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:damian_go/ui/screens/drawer_screen.dart';
 import 'package:damian_go/ui/screens/star_level_screen.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/countries_util.dart';
+import 'package:damian_go/utils/star_level_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -17,8 +20,15 @@ class GoogleMapWidget extends StatefulWidget {
 
 class _GoogleMapWidgetState extends State<GoogleMapWidget>
     with AutomaticKeepAliveClientMixin {
-  late var location;
 
+  //
+  Color _startColor = Colors.lightBlue.shade100;
+  Color _endColor = Colors.redAccent.shade100;
+  bool _isForward = true;
+  late Timer timer;
+  //
+
+  late var location;
   final Map<String, LatLng> countryLocations = CountriesUtil.getAllCountries();
   late LocationData? userLocation;
   final Set<Marker> _markerList = {};
@@ -52,6 +62,30 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     super.initState();
     setUserLocation();
     loadDamianZones();
+    initAnimationStuff();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timer.cancel();
+  }
+
+  initAnimationStuff(){
+    // initialize the start and end colors
+    timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      setState(() {
+        if (_isForward) {
+          _startColor = _endColor;
+          _endColor = Colors.blue;
+        } else {
+          _startColor = _endColor;
+          _endColor = Colors.red;
+        }
+        _isForward = !_isForward;
+      });
+    });
   }
 
   setUserLocation() async{
@@ -92,24 +126,29 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
               padding: EdgeInsets.all(5),
               scrollDirection: Axis.horizontal,
               children: [
-                optionButton(text:'Top users ⭐️',onPressed: (){},backgroundColor: Colors.cyan),
+                optionButton(text:'Top users ⭐️',onPressed: (){},backgroundColor: Colors.white),
                 optionButton(
                   text:'Search users 🔎',
                   onPressed: (){},
-                  backgroundColor: Colors.teal,
+                  backgroundColor: Colors.white,
                 ),
                 optionButton(
-                    text:'Current country',
+                    text:'Location 📍',
                     onPressed: ()=> currentLocation(),
-                    backgroundColor: Colors.black54,
+                    backgroundColor: Colors.white,
+                ),
+                optionButton(
+                  text:'✨ New zones ✨',
+                  onPressed: ()=> currentLocation(),
+                  backgroundColor: Colors.white,
                 ),
                 optionButton(
                     text:'Base (Spain)',
                     onPressed: (){
                       moveToLocation(countryLocations['Spain']!);
                     },
-                    backgroundColor: Colors.blueGrey),
-                optionButton(text:'Globe view  🌍',onPressed: (){},backgroundColor: Colors.amber.shade800),
+                    backgroundColor: Colors.white),
+                optionButton(text:'Globe view  🌍',onPressed: (){},backgroundColor: Colors.white),
               ],
             ),
           ),
@@ -126,6 +165,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         //toolbarHeight: 50,
         centerTitle: true,
         actions: [
+          //Icon(Icons.mode_night_outlined),
           popupMenuButton(),
         ],
         elevation: 0,
@@ -136,11 +176,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     );
   }
 
-  FloatingActionButton floatingActionButton (){
-    return FloatingActionButton.extended(
-      tooltip: 'Generate a new zone',
-      //onPressed: _currentLocation,
-      onPressed: () async{
+  Widget floatingActionButton(){
+    return InkWell(
+      onTap: () async{
         String countryName = await CountriesUtil.getCountryFromLocation(
           //use Spain as the default value if the userLocation is null
             LatLng(userLocation!.latitude ?? 40.463667, userLocation!.longitude ?? -3.74922)
@@ -205,14 +243,37 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
               );
             });
       },
-      backgroundColor: Colors.blueGrey.shade900,
-      //backgroundColor: Colors.blueGrey.shade900,
-      label: const Text('Add zone',style: TextStyle(color: Colors.white),),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      icon: SizedBox(
-        height: 80,
-        width: 80,
-        child: Image.asset('assets/images/piny.png'),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 1500),
+        curve: Curves.easeInOut,
+        //width: 200,
+        margin: EdgeInsets.all(5),
+        height: 90,
+        width: 90,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [_startColor, _endColor],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 90,
+              width: 90,
+              child: Image.asset('assets/images/piny.png'),
+            ),
+            /*
+            Text(
+                'Add zone',
+                style: TextStyle(fontSize: 15,color: Colors.white)
+            ),
+             */
+          ],
+        ),
       ),
     );
   }
@@ -277,7 +338,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                 backgroundColor: backgroundColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
             ),
-            child: Text(text,style: TextStyle(color: Colors.white),),
+            child: Text(text,style: TextStyle(color: Colors.black),),
 
           ),
         ],
