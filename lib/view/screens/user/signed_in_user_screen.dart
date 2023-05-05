@@ -1,5 +1,5 @@
-import 'package:damian_go/ui/components/components.dart';
-import 'package:damian_go/ui/screens/star_level_screen.dart';
+import 'package:damian_go/view/components/components.dart';
+import 'package:damian_go/view/screens/star_level_screen.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/navigator_util.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ignore_for_file: prefer_const_constructors
-
-class DrawerScreen extends StatelessWidget{
-  const DrawerScreen({Key? key}) : super(key: key);
+class SignedInUserScreen extends StatelessWidget{
+  const SignedInUserScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +61,7 @@ class DrawerScreen extends StatelessWidget{
       padding: EdgeInsets.all(7),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.blueGrey.shade100,
+        color: Colors.black12,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -79,28 +77,6 @@ class DrawerScreen extends StatelessWidget{
           ZoneCount(count: 15),
           UserStarLevel(starLevel:StarLevel.Adventurer),
         ],
-      ),
-    );
-  }
-
-  Widget optionsWidget(context){
-    return Expanded(
-      child: Container(
-        child: ListView(
-          children: _optionsList(context),
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 15,
-                offset: Offset(0, 3)
-            )
-          ],
-        ),
       ),
     );
   }
@@ -124,13 +100,13 @@ class DrawerScreen extends StatelessWidget{
     ));
 
     widgets.add(ListTile(
-        title: Text('Share with a friend',style: titleStyle),
-        subtitle: Text('Share the app with friends'),
-        leading: Icon(Icons.share,color: iconColor),
-        trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
-        onTap: () {
+      title: Text('Share with a friend',style: titleStyle),
+      subtitle: Text('Share the app with friends'),
+      leading: Icon(Icons.share,color: iconColor),
+      trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
+      onTap: () {
         showModalBottomSheet(
-          backgroundColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
             barrierColor: Colors.black26,
             context: context,
             builder: (BuildContext context) {
@@ -138,9 +114,9 @@ class DrawerScreen extends StatelessWidget{
                 padding: const EdgeInsets.all(10),
                 margin: const EdgeInsets.only(left: 7, right: 7),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15)
-              ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)
+                ),
                 height: 120,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -184,27 +160,28 @@ class DrawerScreen extends StatelessWidget{
     return widgets;
   }
 
-  Future<String> getVersion() async{
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-    return Future.value(version);
-  }
-
-  socialButton({required String socialMedia,required Icon icon,
-    Function()? onClicked}) {
-    final listTextStyle = TextStyle(color: Colors.black54);
-    return Container(
-      child: Column(
-        children: [
-          InkWell(
-            child: icon,
-            onTap: onClicked,
-          ),
-          Text(socialMedia, style: listTextStyle,),
-        ],
+  Widget optionsWidget(context){
+    return Expanded(
+      child: Container(
+        child: ListView(
+          children: _optionsList(context),
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 15,
+                offset: Offset(0, 3)
+            )
+          ],
+        ),
       ),
     );
   }
+
   /// Method to launch each share option for the [SocialMedia]
   Future share(SocialMedia platform,BuildContext context) async {
     String text = 'Test text';
@@ -308,5 +285,27 @@ class DrawerScreen extends StatelessWidget{
         )
     );
     return items;
+  }
+
+  socialButton({required String socialMedia,required Icon icon,
+    Function()? onClicked}) {
+    final listTextStyle = TextStyle(color: Colors.black54);
+    return Container(
+      child: Column(
+        children: [
+          InkWell(
+            child: icon,
+            onTap: onClicked,
+          ),
+          Text(socialMedia, style: listTextStyle,),
+        ],
+      ),
+    );
+  }
+
+  Future<String> getVersion() async{
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    return Future.value(version);
   }
 }

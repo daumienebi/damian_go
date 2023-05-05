@@ -1,4 +1,4 @@
-import 'package:damian_go/data/models/user.dart';
+import 'package:damian_go/model/user.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DamianZone{

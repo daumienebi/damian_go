@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/star_level_util.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +28,13 @@ class _UserStarLevelState extends State<UserStarLevel> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       margin: EdgeInsets.all(5),
       height: 50,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         //color: starLevelDesign.backgroundColor
-        color: Colors.cyan.shade800
+        color: Colors.cyan.shade900
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

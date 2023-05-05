@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 // ignore_for_file: prefer_const_constructors
 
@@ -21,6 +22,26 @@ class UserSearchDelegateScreen extends SearchDelegate {
 
   @override
   TextInputAction get textInputAction => TextInputAction.search;
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    return theme.copyWith(
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light
+        ),
+        backgroundColor: colorScheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.white,
+        iconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey), toolbarTextStyle: theme.textTheme.bodyText2, titleTextStyle: theme.textTheme.headline6,
+      ),
+      inputDecorationTheme: searchFieldDecorationTheme ??
+          InputDecorationTheme(
+            hintStyle: searchFieldStyle ?? theme.inputDecorationTheme.hintStyle,
+            border: InputBorder.none,
+          ),
+    );
+  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {

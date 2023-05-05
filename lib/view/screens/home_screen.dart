@@ -1,4 +1,4 @@
-import 'package:damian_go/ui/components/components.dart';
+import 'package:damian_go/view/components/components.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -19,7 +19,7 @@ class VerifiedUserName extends StatelessWidget {
           name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 17,
+            fontSize: 18,
           ),
         ),
         SizedBox(width: 5),

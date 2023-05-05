@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'package:damian_go/ui/screens/drawer_screen.dart';
-import 'package:damian_go/ui/screens/screens.dart';
-import 'package:damian_go/ui/screens/star_level_screen.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/countries_util.dart';
 import 'package:damian_go/utils/navigator_util.dart';
+import 'package:damian_go/view/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:location/location.dart';
-
 
 //https://blog.codemagic.io/creating-a-route-calculator-using-google-maps/
 class GoogleMapWidget extends StatefulWidget {
@@ -63,7 +60,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     super.initState();
     setUserLocation();
     loadDamianZones();
-    initAnimationStuff();
+    initializePeriodicAnimation();
   }
 
   @override
@@ -73,7 +70,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     timer.cancel();
   }
 
-  initAnimationStuff(){
+  initializePeriodicAnimation(){
     // initialize the start and end colors
     timer = Timer.periodic(Duration(seconds: 2), (timer) {
       setState(() {
@@ -143,22 +140,17 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                   backgroundColor: Colors.white,
                 ),
                 optionButton(
-
                     text:'Location 📍',
                     onPressed: ()=> currentLocation(),
                     backgroundColor: Colors.white,
-                ),
-                optionButton(
-                  text:'✨ New zones ✨',
-                  onPressed: ()=> currentLocation(),
-                  backgroundColor: Colors.white,
                 ),
                 optionButton(
                     text:'Base (Spain)',
                     onPressed: (){
                       moveToLocation(countryLocations['Spain']!);
                     },
-                    backgroundColor: Colors.white),
+                    backgroundColor: Colors.white
+                ),
                 optionButton(text:'Globe view  🌍',onPressed: (){},backgroundColor: Colors.white),
               ],
             ),
@@ -171,7 +163,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         leading: InkWell(
             onTap: () =>
                 Navigator.of(context).push(createRouteWithSlideAnimation()),
-          child: Icon(Icons.menu),
+          child: Icon(Icons.person),
         ),
         //toolbarHeight: 50,
         centerTitle: true,
@@ -254,6 +246,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
               );
             });
       },
+
       child: AnimatedContainer(
         duration: Duration(milliseconds: 1500),
         curve: Curves.easeInOut,
@@ -270,7 +263,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
           boxShadow: [
             BoxShadow(
               color: Colors.white,
-              blurRadius: 3,
+              blurRadius: 4,
               //offset: Offset(0,0),
               spreadRadius: 0.9
             )
@@ -348,7 +341,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
 
   Widget optionButton({required String text,Function()? onPressed,Color? backgroundColor}){
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(7),
       child: Row(
         children: [
           ElevatedButton(
@@ -490,8 +483,8 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
 
   Route createRouteWithSlideAnimation() {
     return PageRouteBuilder(
-      settings: RouteSettings(name: 'drawerScreen',),
-      pageBuilder: (context, animation, secondaryAnimation) => const DrawerScreen(),
+      settings: RouteSettings(name: 'signInUserScreen',),
+      pageBuilder: (context, animation, secondaryAnimation) => SignedInUserScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(-1.5, 1);
         const end = Offset.zero;

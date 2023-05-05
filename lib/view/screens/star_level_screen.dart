@@ -1,4 +1,4 @@
-import 'package:damian_go/ui/components/components.dart';
+import 'package:damian_go/view/components/components.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/star_level_util.dart';
 import 'package:flutter/material.dart';
@@ -21,42 +21,42 @@ class StarLevelScreen extends StatelessWidget{
       padding: EdgeInsets.all(5),
       children: [
         LevelListTile(
-          description: 'Less than 50 zones',
+          description: 'From 1 to 50 zones',
           starLevel: StarLevel.Beginner,
           starLevelDesign: StarLevelDesign.beginnerStarLevelDesign,
         ),
         LevelListTile(
-            description: 'Less than 100 zones',
+            description: 'From 51 to 100 zones',
             starLevel: StarLevel.Explorer,
             starLevelDesign: StarLevelDesign.explorerStarLevelDesign
         ),
         LevelListTile(
-            description: 'Less than 150 zones',
+            description: 'From 101 to 150 zones',
             starLevel: StarLevel.Adventurer,
             starLevelDesign: StarLevelDesign.adventurerStarLevelDesign
         ),
         LevelListTile(
-            description: 'Less than 200 zones',
+            description: 'From 151 to 200 zones',
             starLevel: StarLevel.Discoverer,
             starLevelDesign: StarLevelDesign.discovererStarLevelDesign
         ),
         LevelListTile(
-            description: 'Less than 250 zones',
+            description: 'From 201 to 250 zones',
             starLevel: StarLevel.Navigator,
             starLevelDesign: StarLevelDesign.navigatorStarLevelDesign
         ),
         LevelListTile(
-            description: 'Less than 300 zones',
+            description: 'From 251 to 300 zones',
             starLevel: StarLevel.Pioneer,
             starLevelDesign: StarLevelDesign.pioneerStarLevelDesign
         ),
         LevelListTile(
-            description: 'Less than 350 zones',
+            description: 'From 301 to 350 zones',
             starLevel: StarLevel.Trekker,
             starLevelDesign: StarLevelDesign.trekkerStarLevelDesign
         ),
         LevelListTile(
-            description: 'Less than 400 zones',
+            description: 'From 351 to 400 zones',
             starLevel: StarLevel.Master_Explorer,
             starLevelDesign: StarLevelDesign.masterExplorerStarLevelDesign
         )
@@ -77,7 +77,7 @@ class LevelListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: starLevelDesign.icon,
-      subtitle: Text(description),
+      subtitle: Text(description,style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.w500)),
       trailing: InkWell(
         child: Icon(Icons.info_outline),
         onTap:(){
@@ -87,14 +87,14 @@ class LevelListTile extends StatelessWidget {
               builder: (context){
                 return Container(
                   child: AlertDialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     content: SizedBox(
                       height: 120,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Text('Insert the star level description here in few words, not too much text'),
                             UserStarLevel(starLevel: starLevel),
-                            Text('Insert the star level description here in few words, not too much text')
                           ]
                       ),
                     ),
