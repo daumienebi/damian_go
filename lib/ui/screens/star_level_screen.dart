@@ -1,7 +1,7 @@
+import 'package:damian_go/ui/components/components.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/star_level_util.dart';
 import 'package:flutter/material.dart';
-import '../widgets/widgets.dart';
 
 class StarLevelScreen extends StatelessWidget{
   @override
@@ -82,11 +82,22 @@ class LevelListTile extends StatelessWidget {
         child: Icon(Icons.info_outline),
         onTap:(){
           showDialog(
+              barrierColor: Colors.black26,
               context: context,
               builder: (context){
-                return AlertDialog(
-                  content: Container(
-                    child: UserStarLevel(starLevel: starLevel),
+                return Container(
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    content: SizedBox(
+                      height: 120,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            UserStarLevel(starLevel: starLevel),
+                            Text('Insert the star level description here in few words, not too much text')
+                          ]
+                      ),
+                    ),
                   ),
                 );
               }

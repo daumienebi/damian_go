@@ -1,3 +1,4 @@
+import 'package:damian_go/ui/components/components.dart';
 import 'package:damian_go/ui/screens/star_level_screen.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/navigator_util.dart';
@@ -7,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/widgets.dart';
 // ignore_for_file: prefer_const_constructors
 
 class DrawerScreen extends StatelessWidget{

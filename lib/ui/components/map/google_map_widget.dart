@@ -1,14 +1,15 @@
 import 'dart:async';
-
 import 'package:damian_go/ui/screens/drawer_screen.dart';
+import 'package:damian_go/ui/screens/screens.dart';
 import 'package:damian_go/ui/screens/star_level_screen.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/countries_util.dart';
-import 'package:damian_go/utils/star_level_util.dart';
+import 'package:damian_go/utils/navigator_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:location/location.dart';
+
 
 //https://blog.codemagic.io/creating-a-route-calculator-using-google-maps/
 class GoogleMapWidget extends StatefulWidget {
@@ -126,13 +127,23 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
               padding: EdgeInsets.all(5),
               scrollDirection: Axis.horizontal,
               children: [
-                optionButton(text:'Top users ⭐️',onPressed: (){},backgroundColor: Colors.white),
+                optionButton(text:'Top users ⭐️',
+                    onPressed: ()=> Navigator.of(context).push(
+                        NavigatorUtil.createRouteWithFadeAnimation(newPage: TopUsersScreen())
+                    ),
+                    backgroundColor: Colors.white),
                 optionButton(
                   text:'Search users 🔎',
-                  onPressed: (){},
+                  onPressed: () {
+                    showSearch(
+                        context: context,
+                        delegate:
+                        UserSearchDelegateScreen(hintText: 'Search users'));
+                  },
                   backgroundColor: Colors.white,
                 ),
                 optionButton(
+
                     text:'Location 📍',
                     onPressed: ()=> currentLocation(),
                     backgroundColor: Colors.white,
@@ -248,7 +259,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         curve: Curves.easeInOut,
         //width: 200,
         margin: EdgeInsets.all(5),
-        height: 90,
+        height: 70,
         width: 90,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -256,13 +267,21 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white,
+              blurRadius: 3,
+              //offset: Offset(0,0),
+              spreadRadius: 0.9
+            )
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 90,
+              height: 70,
               width: 90,
               child: Image.asset('assets/images/piny.png'),
             ),

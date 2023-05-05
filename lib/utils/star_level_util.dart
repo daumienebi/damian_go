@@ -82,7 +82,7 @@ class StarLevelDesign{
   static var masterExplorerStarLevelDesign = StarLevelDesign(
       starLevel: StarLevel.Master_Explorer,
       backgroundColor: Colors.cyanAccent.shade200,
-      icon: Icon(Icons.star,color: Colors.teal,size: iconSize)
+      icon: Icon(Icons.star,color: Colors.blueGrey.shade900,size: iconSize)
   );
   // Add one for Damian too
 
