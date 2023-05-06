@@ -2,7 +2,6 @@ import 'package:damian_go/model/user.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DamianZone{
-
   final int id;
   final LatLng latLng;
   final DateTime zoneDate;

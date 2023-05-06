@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/countries_util.dart';
 import 'package:damian_go/utils/navigator_util.dart';
-import 'package:damian_go/view/screens/screens.dart';
+import 'package:damian_go/view/views.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //https://blog.codemagic.io/creating-a-route-calculator-using-google-maps/
 class GoogleMapWidget extends StatefulWidget {
@@ -95,7 +96,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         const ImageConfiguration(),
         'assets/images/stick_250.png'
     );
+    int limit = 0;
     for (final countryName in countryLocations.keys) {
+      limit ++;
       final marker = Marker(
         markerId: MarkerId(countryName),
         position: countryLocations[countryName]!,
@@ -106,6 +109,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         icon: customIcon,
       );
       _markerList.add(marker);
+      if(limit == 7) break;
     }
   }
 
@@ -203,7 +207,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
                 margin: const EdgeInsets.only(left: 7, right: 7),
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)
+                    borderRadius: BorderRadius.circular(15),
                 ),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -293,6 +297,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
   /// The app bar actions to view a simple menu
   PopupMenuButton popupMenuButton(){
     return PopupMenuButton<String>(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         PopupMenuItem<String>(
           value: 'menu_item_1',
@@ -311,30 +316,18 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         // Handle menu item selection
         switch (value) {
           case 'menu_item_1':
-            Navigator.of(context).push(
-                _createRoute(page: StarLevelScreen()));
+            final url = Uri.parse('https://daumienebi.github.io/yo_nunca/policy.html');
+            _launchUrl(url);
             break;
           case 'menu_item_2':
-            Navigator.of(context).push(
-                _createRoute(page: StarLevelScreen()));
+            final url = Uri.parse('https://daumienebi.github.io/yo_nunca/policy.html');
+            _launchUrl(url);
             break;
           case 'menu_item_3':
-            Navigator.of(context).push(
-                _createRoute(page: StarLevelScreen()));
+            final url = Uri.parse('https://daumienebi.github.io/alice_store/policy.html');
+            _launchUrl(url);
             break;
         }
-      },
-    );
-  }
-
-  Route _createRoute({required page}) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
       },
     );
   }
@@ -456,25 +449,6 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
     });
   }
 
-  _mapNotCreated(context) {
-    return showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: const Text("Sorry"),
-              content: const Text("The map must be loaded first"),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context, 'Valor de vuelta');
-                    },
-                    child: const Text('Accept')),
-              ],
-            ));
-  }
-
   void onMapCreate(GoogleMapController mapController) {
     setState(() {
       _mapController = mapController;
@@ -484,7 +458,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
   Route createRouteWithSlideAnimation() {
     return PageRouteBuilder(
       settings: RouteSettings(name: 'signInUserScreen',),
-      pageBuilder: (context, animation, secondaryAnimation) => SignedInUserScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) => SignedInProfileScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(-1.5, 1);
         const end = Offset.zero;
@@ -497,6 +471,10 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
         );
       },
     );
+  }
+
+  _launchUrl(Uri url) async{
+    await launchUrl(url,mode:LaunchMode.externalApplication);
   }
 
   @override

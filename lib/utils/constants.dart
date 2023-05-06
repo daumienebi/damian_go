@@ -3,7 +3,7 @@ enum SocialMedia {Facebook,Twitter,Instagram,Email,Whatsapp,Enlace}
 enum StarLevel {Beginner,Explorer,Adventurer,Discoverer,Navigator,Pioneer,Trekker,Master_Explorer}
 
 class Constants{
-  static String playStoreId = 'com.devdaumienebi.damiango';
+  static String playStoreId = 'com.devdaumienebi.yonunca';//for now
   static List<Color> loadingIndicatorColors =
   [
     Colors.blueGrey.shade200,

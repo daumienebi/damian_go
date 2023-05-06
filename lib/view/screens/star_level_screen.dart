@@ -1,4 +1,4 @@
-import 'package:damian_go/view/components/components.dart';
+import 'package:damian_go/view/views.dart';
 import 'package:damian_go/utils/constants.dart';
 import 'package:damian_go/utils/star_level_util.dart';
 import 'package:flutter/material.dart';
@@ -20,42 +20,42 @@ class StarLevelScreen extends StatelessWidget{
     return ListView(
       padding: EdgeInsets.all(5),
       children: [
-        LevelListTile(
+        _LevelListTile(
           description: 'From 1 to 50 zones',
           starLevel: StarLevel.Beginner,
           starLevelDesign: StarLevelDesign.beginnerStarLevelDesign,
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 51 to 100 zones',
             starLevel: StarLevel.Explorer,
             starLevelDesign: StarLevelDesign.explorerStarLevelDesign
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 101 to 150 zones',
             starLevel: StarLevel.Adventurer,
             starLevelDesign: StarLevelDesign.adventurerStarLevelDesign
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 151 to 200 zones',
             starLevel: StarLevel.Discoverer,
             starLevelDesign: StarLevelDesign.discovererStarLevelDesign
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 201 to 250 zones',
             starLevel: StarLevel.Navigator,
             starLevelDesign: StarLevelDesign.navigatorStarLevelDesign
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 251 to 300 zones',
             starLevel: StarLevel.Pioneer,
             starLevelDesign: StarLevelDesign.pioneerStarLevelDesign
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 301 to 350 zones',
             starLevel: StarLevel.Trekker,
             starLevelDesign: StarLevelDesign.trekkerStarLevelDesign
         ),
-        LevelListTile(
+        _LevelListTile(
             description: 'From 351 to 400 zones',
             starLevel: StarLevel.Master_Explorer,
             starLevelDesign: StarLevelDesign.masterExplorerStarLevelDesign
@@ -65,11 +65,11 @@ class StarLevelScreen extends StatelessWidget{
   }
 }
 
-class LevelListTile extends StatelessWidget {
+class _LevelListTile extends StatelessWidget {
   final String description;
   final StarLevel starLevel;
   final StarLevelDesign starLevelDesign;
-  const LevelListTile({
+  const _LevelListTile({
     Key? key, required this.description, required this.starLevel, required this.starLevelDesign,
   }) : super(key: key);
 

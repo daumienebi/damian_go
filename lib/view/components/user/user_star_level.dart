@@ -34,7 +34,7 @@ class _UserStarLevelState extends State<UserStarLevel> {
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         //color: starLevelDesign.backgroundColor
-        color: Colors.cyan.shade900
+        color: Colors.blueGrey.shade600
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
