@@ -301,30 +301,38 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget>
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         PopupMenuItem<String>(
           value: 'menu_item_1',
-          child: Text('Privacy Policy'),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.info_outline,color: Colors.blueGrey,),
+              SizedBox(width: 5,),
+              Text('About app'),
+            ],
+          ),
         ),
         PopupMenuItem<String>(
           value: 'menu_item_2',
-          child: Text('Terms & conditions'),
-        ),
-        PopupMenuItem<String>(
-          value: 'menu_item_3',
-          child: Text('Help'),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.help_outline,color: Colors.blueGrey,),
+              SizedBox(width: 5),
+              Text('Help'),
+            ],
+          ),
         ),
       ],
       onSelected: (String value) {
         // Handle menu item selection
         switch (value) {
           case 'menu_item_1':
-            final url = Uri.parse('https://daumienebi.github.io/yo_nunca/policy.html');
-            _launchUrl(url);
+            Navigator.of(context).push(
+                NavigatorUtil.createRouteWithSlideAnimation(
+                    newPage: AboutAppScreen())
+            );
             break;
           case 'menu_item_2':
             final url = Uri.parse('https://daumienebi.github.io/yo_nunca/policy.html');
-            _launchUrl(url);
-            break;
-          case 'menu_item_3':
-            final url = Uri.parse('https://daumienebi.github.io/alice_store/policy.html');
             _launchUrl(url);
             break;
         }

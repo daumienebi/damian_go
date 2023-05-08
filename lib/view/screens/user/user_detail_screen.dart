@@ -56,7 +56,7 @@ class UserDetailScreen extends StatelessWidget{
           ),
           VerifiedUserName(name: '@derick',isVerified: true,centered: true),
           Clout(followers: 10,following: 0),
-          ZoneCount(count: 15),
+          //ZoneCount(count: 15),
           UserStarLevel(starLevel:StarLevel.Adventurer),
         ],
       ),
@@ -66,20 +66,14 @@ class UserDetailScreen extends StatelessWidget{
   Widget moreUserDetails() {
     final date = DateTime.now();
     final trailingStyle =
-    TextStyle(color: Colors.black87, fontWeight: FontWeight.w600,fontSize: 16);
+    TextStyle(color: Colors.black87, fontWeight: FontWeight.w500,fontSize: 16);
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
         child: ListView(
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'User details',
-              style: TextStyle(fontSize: 18, color: Colors.black54),
-            ),
             ListTile(
               leading: Icon(Icons.person),
               title: Text('Username '),

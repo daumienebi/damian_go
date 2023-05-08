@@ -6,7 +6,7 @@ export 'package:damian_go/view/screens/star_level_screen.dart';
 export 'package:damian_go/view/screens/user/top_users_screen.dart';
 export 'package:damian_go/view/screens/user/user_search_delegate_screen.dart';
 export 'package:damian_go/view/screens/user/user_detail_screen.dart';
-export 'package:damian_go/view/screens/settings_screen.dart';
+export 'package:damian_go/view/screens/about_app_screen.dart';
 
 /// Components exports here :
 

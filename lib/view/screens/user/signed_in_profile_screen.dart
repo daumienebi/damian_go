@@ -17,10 +17,46 @@ class SignedInProfileScreen extends StatelessWidget{
           actions: [
             IconButton(
                  onPressed: (){
-                   Navigator.of(context).push(
-                       NavigatorUtil.createRouteWithSlideAnimation(
-                           newPage: SettingsScreen())
-                   );
+                   showModalBottomSheet(
+                       barrierColor: Colors.black26,
+                       backgroundColor: Colors.transparent,
+                       context: context,
+                       builder: (BuildContext context) {
+                         double height = MediaQuery.of(context).size.height;
+                         return Container(
+                           height: height * 0.3,
+                           padding: const EdgeInsets.all(10),
+                           margin: const EdgeInsets.only(left: 7, right: 7),
+                           decoration: BoxDecoration(
+                             color: Colors.white,
+                             borderRadius: BorderRadius.circular(15),
+                           ),
+                           child: Expanded(
+                             child: ListView(
+                               //scrollDirection: Axis.horizontal,
+                               children: [
+                                 _SettingsListTile(
+                                   title: 'Help',
+                                   subtitle: 'Help about the app',
+                                   iconData: Icons.logout,
+                                 ),
+                                 _SettingsListTile(
+                                   title: 'Delete account',
+                                   subtitle: 'Permanently delete your account',
+                                   iconData: Icons.delete,
+                                   dangerZone: true,
+                                 ),
+                                 _SettingsListTile(
+                                   title: 'Log out',
+                                   subtitle: '',
+                                   iconData: Icons.logout,
+                                   dangerZone: true,
+                                 ),
+                               ],
+                             ),
+                           ),
+                         );
+                       });
                  },
                 icon: Icon(Icons.settings
                 )
@@ -47,38 +83,33 @@ class SignedInProfileScreen extends StatelessWidget{
   Widget moreUserDetails() {
     final date = DateTime.now();
     final trailingStyle =
-    TextStyle(color: Colors.black87, fontWeight: FontWeight.w600,fontSize: 16);
+    TextStyle(color: Colors.black54, fontWeight: FontWeight.w400,fontSize: 16);
+    final leadingStyle = TextStyle(color: Colors.black87);
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
         child: ListView(
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'User details',
-              style: TextStyle(fontSize: 18, color: Colors.black54),
-            ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text('Username '),
+              title: Text('Username ',style: leadingStyle,),
               trailing: Text('derick', style: trailingStyle),
             ),
             ListTile(
               leading: Icon(Icons.location_on),
-              title: Text('Nº of Zones '),
+              title: Text('Nº of Zones ',style: leadingStyle),
               trailing: Text('15', style: trailingStyle),
             ),
             ListTile(
               leading: Icon(Icons.date_range),
-              title: Text('Joined '),
+              title: Text('Joined ',style: leadingStyle,),
               trailing: Text('${date.day}/${date.month}/${date.year}', style: trailingStyle),
             ),
             ListTile(
               leading: Icon(Icons.date_range),
-              title: Text('Birthday '),
+              title: Text('Birthday ',style: leadingStyle,),
               trailing: Text('${date.day}/${date.month}/${date.year}', style: trailingStyle),
             ),
           ],
@@ -108,6 +139,30 @@ class SignedInProfileScreen extends StatelessWidget{
           UserStarLevel(starLevel:StarLevel.Adventurer),
         ],
       ),
+    );
+  }
+}
+
+class _SettingsListTile extends StatelessWidget{
+  final String title;
+  final String subtitle;
+  final IconData iconData;
+  final bool dangerZone;
+  final Function()? onTap;
+
+  const _SettingsListTile({super.key, required this.title, required this.subtitle, required this.iconData, this.onTap, this.dangerZone = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final titleStyle = TextStyle(fontSize: 16,color: dangerZone ? Colors.red : Colors.black87);
+    final Color iconColor = Colors.blueGrey.shade500;
+    // TODO: implement build
+    return ListTile(
+        title: Text(title,style: titleStyle),
+        subtitle: Text(subtitle),
+        leading: Icon(iconData,color: iconColor),
+        trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10),
+        onTap: onTap ?? (){}
     );
   }
 }

@@ -7,13 +7,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsScreen extends StatelessWidget{
+class AboutAppScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        title: Text('Settings'),
+        title: Text('About app'),
       ),
       body: Column(
           children: [
@@ -45,7 +45,7 @@ class SettingsScreen extends StatelessWidget{
   Widget settings(BuildContext context){
     return ListView(
       children: [
-        _SettingsListTile(
+        _AboutAppListTile(
             title: 'Stars Level',
             subtitle: 'Available star levels',
             iconData: Icons.star,
@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget{
                   NavigatorUtil.createRouteWithSlideAnimation(newPage: StarLevelScreen()));
             }
         ),
-        _SettingsListTile(
+        _AboutAppListTile(
             title: 'Share app',
             subtitle: 'Share the app with a friend',
             iconData: Icons.share,
@@ -82,7 +82,7 @@ class SettingsScreen extends StatelessWidget{
                                 fontSize: 20
                             ),
                           ),
-                          SizedBox(height: 5,),
+                          SizedBox(height: 5),
                           Expanded(
                             child: ListView(
                               scrollDirection: Axis.horizontal,
@@ -95,7 +95,7 @@ class SettingsScreen extends StatelessWidget{
           },
 
         ),
-        _SettingsListTile(
+        _AboutAppListTile(
           title: 'Rate app',
           subtitle: 'Rate the app on Playstore',
           iconData: FontAwesomeIcons.googlePlay,
@@ -106,17 +106,23 @@ class SettingsScreen extends StatelessWidget{
             await launchUrl(url,mode: LaunchMode.externalApplication);
           },
         ),
-        _SettingsListTile(
-            title: 'Delete account',
-            subtitle: 'Permanently delete your account',
-            iconData: Icons.delete,
-            dangerZone: true,
+        _AboutAppListTile(
+          title: 'Privacy Policy',
+          subtitle: 'App privacy policy',
+          iconData: Icons.privacy_tip_outlined,
+          onTap: () async{
+            final url = Uri.parse('https://daumienebi.github.io/yo_nunca/policy.html');
+            await launchUrl(url,mode: LaunchMode.externalApplication);
+          },
         ),
-        _SettingsListTile(
-            title: 'Log out',
-            subtitle: '',
-            iconData: Icons.logout,
-            dangerZone: true,
+        _AboutAppListTile(
+          title: 'Terms & Conditions',
+          subtitle: 'App Terms and Conditions',
+          iconData: Icons.file_present,
+          onTap: () async{
+            final url = Uri.parse('https://daumienebi.github.io/yo_nunca/policy.html');
+            await launchUrl(url,mode: LaunchMode.externalApplication);
+          },
         ),
       ],
     );
@@ -250,27 +256,26 @@ class SettingsScreen extends StatelessWidget{
   }
 }
 
-class _SettingsListTile extends StatelessWidget{
+class _AboutAppListTile extends StatelessWidget{
   final String title;
   final String subtitle;
   final IconData iconData;
   final bool dangerZone;
   final Function()? onTap;
 
-  const _SettingsListTile({super.key, required this.title, required this.subtitle, required this.iconData, this.onTap, this.dangerZone = false});
+  const _AboutAppListTile({super.key, required this.title, required this.subtitle, required this.iconData, this.onTap, this.dangerZone = false});
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = TextStyle(fontSize: 17,color: dangerZone ? Colors.red : Colors.black87);
+    final titleStyle = TextStyle(fontSize: 16,color: dangerZone ? Colors.red : Colors.black87);
     final Color iconColor = Colors.blueGrey.shade500;
     // TODO: implement build
     return ListTile(
         title: Text(title,style: titleStyle),
         subtitle: Text(subtitle),
         leading: Icon(iconData,color: iconColor),
-        trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10,),
+        trailing: Icon(Icons.arrow_forward_ios_sharp,size: 10),
         onTap: onTap ?? (){}
     );
   }
-
 }
